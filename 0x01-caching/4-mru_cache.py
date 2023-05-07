@@ -9,29 +9,31 @@ class MRUCache(BaseCaching):
     and is a caching system
     """
     def __init__(self):
-        """Initializes the MRUCache class.
-        """
+        """class constructor"""
         super().__init__()
-        self.mru = []
+        self.cache_data_list = []
 
     def put(self, key, item):
-        """Adds an item to the caching system
+        """Adds an item into the caching system
         """
         if key and item:
-            if len(self.cache_data) == BaseCaching.MAX_ITEMS\
-                    and key not in self.keys:
-                del_key = self.keys.pop()
-                del self.cache_data[del_key]
-                print("DISCARD: {}".format(del_key))
-            if key in self.keys:
-                self.keys.remove(key)
             self.cache_data[key] = item
-            self.keys.append(key)
+            if key not in self.cache_data_list:
+                self.cache_data_list.append(key)
+            else:
+                self.cache_data_list.remove(key)
+                self.cache_data_list.append(key)
+            if len(self.cache_data) > BaseCaching.MAX_ITEMS:
+                removed = self.cache_data_list.pop(-2)
+                del self.cache_data[removed]
+                print("DISCARD: {}".format(removed))
 
     def get(self, key):
         """Gets a value from the caching system
         """
-        if key in self.keys:
-            self.keys.remove(key)
-            self.keys.append(key)
-        return self.cache_data.get(key)
+        if key:
+            if key in self.cache_data:
+                self.cache_data_list.remove(key)
+                self.cache_data_list.append(key)
+                return self.cache_data[key]
+        return None
