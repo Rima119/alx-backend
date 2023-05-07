@@ -18,19 +18,20 @@ class MRUCache(BaseCaching):
         """Adds an item to the caching system
         """
         if key and item:
-            if key in self.cache_data:
-                self.cache_data[key] = item
-            elif len(self.cache_data) >= BaseCaching.MAX_ITEMS:
-                print("DISCARD: {}".format(self.mru[-1]))
-                del self.cache_data[self.mru[-1]]
-                self.mru.pop()
+            if len(self.cache_data) == BaseCaching.MAX_ITEMS\
+                    and key not in self.keys:
+                del_key = self.keys.pop()
+                del self.cache_data[del_key]
+                print("DISCARD: {}".format(del_key))
+            if key in self.keys:
+                self.keys.remove(key)
             self.cache_data[key] = item
-            self.mru.insert(0, key)
+            self.keys.append(key)
 
     def get(self, key):
         """Gets a value from the caching system
         """
-        if key in self.cache_data:
-            self.mru.remove(key)
-            self.mru.insert(0, key)
+        if key in self.keys:
+            self.keys.remove(key)
+            self.keys.append(key)
         return self.cache_data.get(key)
