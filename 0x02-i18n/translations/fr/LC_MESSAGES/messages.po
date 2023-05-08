@@ -26,7 +26,7 @@ msgstr "Bienvenue chez Holberton"
 #: templates/3-index.html templates/4-index.html:8 templates/5-index.html
 #: templates/6-index.html templates/7-index.html:8 templates/index.html
 msgid "home_header"
-msgstr "Bonjour monde"
+msgstr "Bonjour monde!"
 
 #: templates/5-index.html templates/6-index.html
 #: templates/7-index.html templates/index.html
